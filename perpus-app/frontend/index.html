@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perpustakaan Digital</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #34495e;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            background: #ecf0f1;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="judul">Memuat...</h1>
+
+        <p><b>Nama:</b> <span id="nama"></span></p>
+        <p><b>NIM:</b> <span id="nim"></span></p>
+
+        <h2>Daftar Buku:</h2>
+        <ul id="list"></ul>
+
+        <hr>
+
+        <h3>Tambah Buku:</h3>
+        <input type="text" id="input-buku" placeholder="Judul buku...">
+        <button onclick="tambahBuku()">Tambah</button>
+    </div>
+
+    <script>
+        const API_URL = "/api";
+
+        function loadData() {
+            fetch(`${API_URL}/info`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('judul').innerText = data.judul_katalog;
+                    document.getElementById('nama').innerText = data.pemilik;
+                    document.getElementById('nim').innerText = data.nim;
+
+                    const list = document.getElementById('list');
+                    list.innerHTML = '';
+
+                    data.items.forEach(item => {
+                        let li = document.createElement('li');
+                        li.innerText = item;
+                        list.appendChild(li);
+                    });
+                });
+        }
+
+        function tambahBuku() {
+            const input = document.getElementById('input-buku');
+
+            fetch(`${API_URL}/add-item`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item: input.value })
+            })
+            .then(res => res.json())
+            .then(() => {
+                input.value = '';
+                loadData();
+            });
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
