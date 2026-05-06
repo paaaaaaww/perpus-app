@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend-api
-        image: <USERNAME_DOCKER>/perpus-backend:latest
+        image: fauziaaa/perpus-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: frontend-ui
-        image: <USERNAME_DOCKER>/perpus-frontend:latest
+        image: fauziaaa/perpus-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
